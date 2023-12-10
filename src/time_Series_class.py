@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import datetime as dt
 
 import matplotlib.pylab as plt
 
@@ -8,7 +7,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, LSTM
 from tensorflow.keras.layers import Conv1D, GRU
-from tensorflow.keras.optimizers.legacy import Adam# use legacy to optimize code
+from tensorflow.keras.optimizers.legacy import Adam
 
 from sklearn.preprocessing import MinMaxScaler
 
