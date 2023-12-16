@@ -12,8 +12,11 @@
 # Ignore all text files
 *.txt
 *.bin
+*.h5
+*.keras
 *data/
 *videos/
+*models/
 
 # Ignore specific file
 test.mp4
