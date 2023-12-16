@@ -12,6 +12,8 @@
 # Ignore all text files
 *.txt
 *.bin
+*.h5
+*.keras
 *data/
 *videos/
 *models/
