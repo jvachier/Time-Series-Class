@@ -28,7 +28,7 @@ class Timeseries:
         self.scaler = MinMaxScaler()
         df = self.data[self.data["Company"] == self.company]
         df = df.dropna()
-        df["Date"] = pd.to_datetime(df["Date"])
+        df["Date"] = pd.to_datetime(df["Date"], utc=True)
         columns = df.columns
         df = df.drop(columns=columns[5:])
         cols = ["Close"]
@@ -241,7 +241,15 @@ class Timeseries:
         plt.legend()
         plt.xlabel("Time")
         plt.ylabel("Close")
-        plt.savefig("./figures/time_series_prediction_" + str(self.company) + ".png")
+        if (
+            os.path.isfile(
+                "./figures/time_series_prediction_" + str(self.company) + ".png"
+            )
+            is False
+        ):
+            plt.savefig(
+                "./figures/time_series_prediction_" + str(self.company) + ".png"
+            )
         plt.show()
 
 
