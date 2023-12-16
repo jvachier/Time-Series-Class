@@ -162,19 +162,15 @@ class Timeseries:
                 "GRU - Fold: %2d, Acc.: %.4f, Loss: %.4f"
                 % (k + 1, score_GRU[1], score_GRU[0])
             )
-            if (
-                os.path.isfile("./models/model_LSTM_" + str(self.company) + "_.keras")
-                is False
-            ):
-                self.model_LSTM.save(
-                    "./models/model_LSTM_" + str(self.company) + "_.keras"
-                )
-                self.model_Conv1D.save(
-                    "./models/model_Conv1D_" + str(self.company) + "_.keras"
-                )
-                self.model_GRU.save(
-                    "./models/model_GRU_" + str(self.company) + "_.keras"
-                )
+        if (
+            os.path.isfile("./models/model_LSTM_" + str(self.company) + ".keras")
+            is False
+        ):
+            self.model_LSTM.save("./models/model_LSTM_" + str(self.company) + ".keras")
+            self.model_Conv1D.save(
+                "./models/model_Conv1D_" + str(self.company) + ".keras"
+            )
+            self.model_GRU.save("./models/model_GRU_" + str(self.company) + ".keras")
 
     def test_prediction_if_no_previous_models(
         self, x_input: np.array, df: pd.DataFrame
@@ -245,6 +241,7 @@ class Timeseries:
         plt.legend()
         plt.xlabel("Time")
         plt.ylabel("Close")
+        plt.savefig("./figures/time_series_prediction_" + str(self.company) + ".png")
         plt.show()
 
 
@@ -256,9 +253,9 @@ def main():
     print("\n")
     print("Company: AAPL")
     print("\n")
-    AAPL = Timeseries(df, "AAPL", 2, 5)
+    AAPL = Timeseries(df, "AAPL", 10, 50)
 
-    ARES = Timeseries(df, "ARES", 2, 5)
+    ARES = Timeseries(df, "ARES", 10, 50)
 
     df_AAPL = AAPL.prepare_data()
     train_df_AAPL, test_df_AAPL = AAPL.train_test_split(df_AAPL)
@@ -277,7 +274,7 @@ def main():
         (X_test_AAPL.shape[0], X_test_AAPL.shape[1], n_features)
     )
 
-    if os.path.isfile("./models/model_LSTM_AAPL_.keras") is False:
+    if os.path.isfile("./models/model_LSTM_AAPL.keras") is False:
         AAPL.models(n_steps_in, n_steps_out, n_features)
         AAPL.train_models(X_train_AAPL, y_train_AAPL)
 
@@ -289,9 +286,9 @@ def main():
         ) = AAPL.test_prediction_if_no_previous_models(x_input_AAPL, df_AAPL)
         AAPL.figure(df, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in)
     else:
-        model_GRU = load_model("./models/model_GRU_AAPL_.keras")
-        model_Conv1D = load_model("./models/model_Conv1D_AAPL_.keras")
-        model_LSTM = load_model("./models/model_LSTM_AAPL_.keras")
+        model_GRU = load_model("./models/model_GRU_AAPL.keras")
+        model_Conv1D = load_model("./models/model_Conv1D_AAPL.keras")
+        model_LSTM = load_model("./models/model_LSTM_AAPL.keras")
         print(model_GRU.summary(), model_Conv1D.summary(), model_LSTM.summary())
         mean_LSTM, mean_Conv1D, mean_GRU, df = AAPL.test_prediction_if_previous_models(
             x_input_AAPL, df_AAPL, model_LSTM, model_Conv1D, model_GRU
@@ -319,7 +316,7 @@ def main():
         (X_test_ARES.shape[0], X_test_ARES.shape[1], n_features)
     )
 
-    if os.path.isfile("./models/model_LSTM_ARES_.keras") is False:
+    if os.path.isfile("./models/model_LSTM_ARES.keras") is False:
         ARES.models(n_steps_in, n_steps_out, n_features)
         ARES.train_models(X_train_ARES, y_train_ARES)
 
@@ -331,9 +328,9 @@ def main():
         ) = ARES.test_prediction_if_no_previous_models(x_input_ARES, df_ARES)
         ARES.figure(df, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in)
     else:
-        model_GRU = load_model("./models/model_GRU_ARES_.keras")
-        model_Conv1D = load_model("./models/model_Conv1D_ARES_.keras")
-        model_LSTM = load_model("./models/model_LSTM_ARES_.keras")
+        model_GRU = load_model("./models/model_GRU_ARES.keras")
+        model_Conv1D = load_model("./models/model_Conv1D_ARES.keras")
+        model_LSTM = load_model("./models/model_LSTM_ARES.keras")
         print(model_GRU.summary(), model_Conv1D.summary(), model_LSTM.summary())
         mean_LSTM, mean_Conv1D, mean_GRU, df = ARES.test_prediction_if_previous_models(
             x_input_ARES, df_ARES, model_LSTM, model_Conv1D, model_GRU
