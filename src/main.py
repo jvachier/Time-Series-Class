@@ -3,6 +3,13 @@ import pandas as pd
 
 import os.path
 
+
+# modules / classes
+import modules.data_preparation as data_preparation
+import modules.models as models
+import modules.loading as loading
+
+
 import matplotlib.pylab as plt
 
 import tensorflow as tf
