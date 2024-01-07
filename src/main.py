@@ -3,15 +3,10 @@ import pandas as pd
 
 import os.path
 
-
 # modules / classes
 import modules.data_preparation as data_prepration
 import modules.models as models
 
-
-import matplotlib.pylab as plt
-
-import tensorflow as tf
 from tensorflow.keras.models import load_model
 
 
@@ -61,9 +56,7 @@ def main() -> None:
         ) = AAPL_model.test_prediction_if_no_previous_models(
             x_input_AAPL, df_AAPL, scaler_AAPL
         )
-        AAPL_model.figure(
-            df, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
-        )
+        AAPL_model.figure(df, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU)
     else:
         model_GRU = load_model("./models/model_GRU_AAPL.keras")
         model_Conv1D = load_model("./models/model_Conv1D_AAPL.keras")
@@ -79,9 +72,7 @@ def main() -> None:
             x_input_AAPL, df_AAPL, model_LSTM, model_Conv1D, model_GRU, scaler_AAPL
         )
 
-        AAPL_model.figure(
-            df_AAPL, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
-        )
+        AAPL_model.figure(df_AAPL, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU)
 
     print("\n")
     print("Company: ARES")
@@ -121,9 +112,7 @@ def main() -> None:
         ) = ARES_model.test_prediction_if_no_previous_models(
             x_input_ARES, df_ARES, scaler_ARES
         )
-        ARES_model.figure(
-            df_ARES, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
-        )
+        ARES_model.figure(df_ARES, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU)
     else:
         model_GRU = load_model("./models/model_GRU_ARES.keras")
         model_Conv1D = load_model("./models/model_Conv1D_ARES.keras")
@@ -137,9 +126,7 @@ def main() -> None:
         ) = ARES_model.test_prediction_if_previous_models(
             x_input_ARES, df_ARES, model_LSTM, model_Conv1D, model_GRU, scaler_ARES
         )
-        ARES_model.figure(
-            df_ARES, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
-        )
+        ARES_model.figure(df_ARES, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU)
 
 
 if __name__ == "__main__":
