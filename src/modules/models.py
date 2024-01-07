@@ -147,7 +147,10 @@ class Timeseries:
             self.model_GRU.save("./models/model_GRU_" + str(self.company) + ".keras")
 
     def test_prediction_if_no_previous_models(
-        self, x_input: np.array, df: pd.DataFrame
+        self,
+        x_input: np.array,
+        df: pd.DataFrame,
+        scaler: object,
     ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         yhat_LSTM = self.model_LSTM.predict(x_input, verbose=0)
         yhat_Conv1D = self.model_Conv1D.predict(x_input, verbose=0)
@@ -157,19 +160,19 @@ class Timeseries:
         mean_Conv1D = np.mean(yhat_Conv1D, axis=1)
         mean_GRU = np.mean(yhat_GRU, axis=1)
 
-        mean_LSTM = self.scaler.inverse_transform(mean_LSTM.reshape(-1, 1)).reshape(
+        mean_LSTM = scaler.inverse_transform(mean_LSTM.reshape(-1, 1)).reshape(
             len(mean_LSTM),
         )
-        mean_Conv1D = self.scaler.inverse_transform(mean_Conv1D.reshape(-1, 1)).reshape(
+        mean_Conv1D = scaler.inverse_transform(mean_Conv1D.reshape(-1, 1)).reshape(
             len(mean_Conv1D),
         )
-        mean_GRU = self.scaler.inverse_transform(mean_GRU.reshape(-1, 1)).reshape(
+        mean_GRU = scaler.inverse_transform(mean_GRU.reshape(-1, 1)).reshape(
             len(mean_GRU),
         )
-
-        df["Close"] = self.scaler.inverse_transform(
+        old_df = df["Close"].shape
+        df["Close"] = scaler.inverse_transform(
             df["Close"].to_numpy().reshape(-1, 1)
-        ).reshape(self.old_df)
+        ).reshape(old_df)
         return mean_LSTM, mean_Conv1D, mean_GRU, df
 
     def test_prediction_if_previous_models(
@@ -179,6 +182,7 @@ class Timeseries:
         model_LSTM: object,
         model_Conv1D: object,
         model_GRU: object,
+        scaler: object,
     ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         yhat_LSTM = model_LSTM.predict(x_input, verbose=0)
         yhat_Conv1D = model_Conv1D.predict(x_input, verbose=0)
@@ -188,19 +192,20 @@ class Timeseries:
         mean_Conv1D = np.mean(yhat_Conv1D, axis=1)
         mean_GRU = np.mean(yhat_GRU, axis=1)
 
-        mean_LSTM = self.scaler.inverse_transform(mean_LSTM.reshape(-1, 1)).reshape(
+        mean_LSTM = scaler.inverse_transform(mean_LSTM.reshape(-1, 1)).reshape(
             len(mean_LSTM),
         )
-        mean_Conv1D = self.scaler.inverse_transform(mean_Conv1D.reshape(-1, 1)).reshape(
+        mean_Conv1D = scaler.inverse_transform(mean_Conv1D.reshape(-1, 1)).reshape(
             len(mean_Conv1D),
         )
-        mean_GRU = self.scaler.inverse_transform(mean_GRU.reshape(-1, 1)).reshape(
+        mean_GRU = scaler.inverse_transform(mean_GRU.reshape(-1, 1)).reshape(
             len(mean_GRU),
         )
 
-        df["Close"] = self.scaler.inverse_transform(
+        old_df = df["Close"].shape
+        df["Close"] = scaler.inverse_transform(
             df["Close"].to_numpy().reshape(-1, 1)
-        ).reshape(self.old_df)
+        ).reshape(old_df)
         return mean_LSTM, mean_Conv1D, mean_GRU, df
 
     def figure(

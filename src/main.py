@@ -57,7 +57,7 @@ def main() -> None:
             mean_LSTM,
             mean_Conv1D,
             mean_GRU,
-            df,
+            df_AAPL,
         ) = AAPL_model.test_prediction_if_no_previous_models(
             x_input_AAPL, df_AAPL, scaler_AAPL
         )
@@ -68,17 +68,19 @@ def main() -> None:
         model_GRU = load_model("./models/model_GRU_AAPL.keras")
         model_Conv1D = load_model("./models/model_Conv1D_AAPL.keras")
         model_LSTM = load_model("./models/model_LSTM_AAPL.keras")
+
         print(model_GRU.summary(), model_Conv1D.summary(), model_LSTM.summary())
         (
             mean_LSTM,
             mean_Conv1D,
             mean_GRU,
-            df,
+            df_AAPL,
         ) = AAPL_model.test_prediction_if_previous_models(
-            x_input_AAPL, df_AAPL, model_LSTM, model_Conv1D, model_GRU
+            x_input_AAPL, df_AAPL, model_LSTM, model_Conv1D, model_GRU, scaler_AAPL
         )
+
         AAPL_model.figure(
-            df, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
+            df_AAPL, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
         )
 
     print("\n")
@@ -88,7 +90,6 @@ def main() -> None:
     ARES_model = models.Timeseries(
         n_splits, n_steps_in, n_steps_out, n_features, epochs, "ARES"
     )
-
     ARES = data_prepration.DataPrep(df, "ARES")
 
     df_ARES, scaler_ARES = ARES.prepare_data()
@@ -116,12 +117,12 @@ def main() -> None:
             mean_LSTM,
             mean_Conv1D,
             mean_GRU,
-            df,
+            df_ARES,
         ) = ARES_model.test_prediction_if_no_previous_models(
             x_input_ARES, df_ARES, scaler_ARES
         )
         ARES_model.figure(
-            df, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
+            df_ARES, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
         )
     else:
         model_GRU = load_model("./models/model_GRU_ARES.keras")
@@ -132,12 +133,12 @@ def main() -> None:
             mean_LSTM,
             mean_Conv1D,
             mean_GRU,
-            df,
+            df_ARES,
         ) = ARES_model.test_prediction_if_previous_models(
-            x_input_ARES, df_ARES, model_LSTM, model_Conv1D, model_GRU
+            x_input_ARES, df_ARES, model_LSTM, model_Conv1D, model_GRU, scaler_ARES
         )
         ARES_model.figure(
-            df, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
+            df_ARES, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU, n_steps_in
         )
 
 

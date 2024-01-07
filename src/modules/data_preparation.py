@@ -14,17 +14,17 @@ class DataPrep:
 
     def prepare_data(self) -> Tuple[pd.DataFrame, object]:
         scaler = MinMaxScaler()
-        df = self.data[self.data["Company"] == self.company]
-        df = df.dropna()
-        df["Date"] = pd.to_datetime(df["Date"], utc=True)
-        columns = df.columns
-        df = df.drop(columns=columns[5:])
+        df_local = self.data[self.data["Company"] == self.company]
+        df_local = df_local.dropna()
+        df_local["Date"] = pd.to_datetime(df_local["Date"], utc=True)
+        columns = df_local.columns
+        df_local = df_local.drop(columns=columns[5:])
         cols = ["Close"]
-        self.old_df = df[cols].shape
-        df[cols] = scaler.fit_transform(df[cols].to_numpy().reshape(-1, 1)).reshape(
-            self.old_df
-        )
-        return df, scaler
+        old_df = df_local[cols].shape
+        df_local[cols] = scaler.fit_transform(
+            df_local[cols].to_numpy().reshape(-1, 1)
+        ).reshape(old_df)
+        return df_local, scaler
 
     def split_sequence(
         self, sequence: pd.Series, n_steps_in: int, n_steps_out: int
