@@ -11,7 +11,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, LSTM
 from tensorflow.keras.layers import Conv1D, GRU
 from tensorflow.keras.optimizers.legacy import Adam
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import TimeSeriesSplit
 
 
@@ -215,13 +214,12 @@ class Timeseries:
         LSTM: pd.DataFrame,
         Conv1D: pd.DataFrame,
         GRU: pd.DataFrame,
-        n_steps_in: int,
     ) -> None:
         plt.figure(figsize=(12, 6))
         plt.plot(df["Date"], df["Close"], "--b", label=self.company)
-        plt.plot(test_df["Date"][n_steps_in:], LSTM, "r", label="RNN using LSTM")
-        plt.plot(test_df["Date"][n_steps_in:], Conv1D, "k", label="Conv1D")
-        plt.plot(test_df["Date"][n_steps_in:], GRU, "g", label="GRU")
+        plt.plot(test_df["Date"][self.n_steps_in :], LSTM, "r", label="RNN using LSTM")
+        plt.plot(test_df["Date"][self.n_steps_in :], Conv1D, "k", label="Conv1D")
+        plt.plot(test_df["Date"][self.n_steps_in :], GRU, "g", label="GRU")
         plt.legend()
         plt.xlabel("Time")
         plt.ylabel("Close")
