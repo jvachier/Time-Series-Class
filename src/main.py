@@ -26,49 +26,49 @@ def main() -> None:
 
     train_df_aapl, test_df_aapl = aapl.train_test_split(df_aapl)
 
-    X_train_aapl, y_train_aapl = aapl.split_sequence(
+    x_train_aapl, y_train_aapl = aapl.split_sequence(
         train_df_aapl["Close"], n_steps_in, n_steps_out
     )
-    X_test_aapl, y_test_aapl = aapl.split_sequence(
+    x_test_aapl, y_test_aapl = aapl.split_sequence(
         test_df_aapl["Close"], n_steps_in, n_steps_out
     )
 
-    X_train_aapl = X_train_aapl.reshape(
-        (X_train_aapl.shape[0], X_train_aapl.shape[1], n_features)
+    x_train_aapl = x_train_aapl.reshape(
+        (x_train_aapl.shape[0], x_train_aapl.shape[1], n_features)
     )
-    x_input_aapl = X_test_aapl.reshape(
-        (X_test_aapl.shape[0], X_test_aapl.shape[1], n_features)
+    x_input_aapl = x_test_aapl.reshape(
+        (x_test_aapl.shape[0], x_test_aapl.shape[1], n_features)
     )
 
     if os.path.isfile("./models/model_LSTM_AAPL.keras") is False:
         aapl_model.models()
-        aapl_model.train_models(X_train_aapl, y_train_aapl)
+        aapl_model.train_models(x_train_aapl, y_train_aapl)
 
         (
-            mean_LSTM,
-            mean_Conv1D,
-            mean_GRU,
+            mean_lstm,
+            mean_conv1d,
+            mean_gru,
             df_aapl,
         ) = aapl_model.test_prediction_if_no_previous_models(
             x_input_aapl, df_aapl, scaler_aapl
         )
-        aapl_model.figure(df, test_df_aapl, mean_LSTM, mean_Conv1D, mean_GRU)
+        aapl_model.figure(df, test_df_aapl, mean_lstm, mean_conv1d, mean_gru)
     else:
-        model_GRU = load_model("./models/model_GRU_AAPL.keras")
-        model_Conv1D = load_model("./models/model_Conv1D_AAPL.keras")
+        model_gru = load_model("./models/model_GRU_AAPL.keras")
+        model_conv1d = load_model("./models/model_Conv1D_AAPL.keras")
         model_LSTM = load_model("./models/model_LSTM_AAPL.keras")
 
-        print(model_GRU.summary(), model_Conv1D.summary(), model_LSTM.summary())
+        print(model_gru.summary(), model_conv1d.summary(), model_LSTM.summary())
         (
-            mean_LSTM,
-            mean_Conv1D,
-            mean_GRU,
+            mean_lstm,
+            mean_conv1d,
+            mean_gru,
             df_aapl,
         ) = aapl_model.test_prediction_if_previous_models(
-            x_input_aapl, df_aapl, model_LSTM, model_Conv1D, model_GRU, scaler_aapl
+            x_input_aapl, df_aapl, model_LSTM, model_conv1d, model_gru, scaler_aapl
         )
 
-        aapl_model.figure(df_aapl, test_df_aapl, mean_LSTM, mean_Conv1D, mean_GRU)
+        aapl_model.figure(df_aapl, test_df_aapl, mean_lstm, mean_conv1d, mean_gru)
 
     print("\n")
     print("Company: ARES")
@@ -101,28 +101,28 @@ def main() -> None:
         ARES_model.train_models(X_train_ARES, y_train_ARES)
 
         (
-            mean_LSTM,
-            mean_Conv1D,
-            mean_GRU,
+            mean_lstm,
+            mean_conv1d,
+            mean_gru,
             df_ARES,
         ) = ARES_model.test_prediction_if_no_previous_models(
             x_input_ARES, df_ARES, scaler_ARES
         )
-        ARES_model.figure(df_ARES, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU)
+        ARES_model.figure(df_ARES, test_df_ARES, mean_lstm, mean_conv1d, mean_gru)
     else:
-        model_GRU = load_model("./models/model_GRU_ARES.keras")
-        model_Conv1D = load_model("./models/model_Conv1D_ARES.keras")
+        model_gru = load_model("./models/model_GRU_ARES.keras")
+        model_conv1d = load_model("./models/model_Conv1D_ARES.keras")
         model_LSTM = load_model("./models/model_LSTM_ARES.keras")
-        print(model_GRU.summary(), model_Conv1D.summary(), model_LSTM.summary())
+        print(model_gru.summary(), model_conv1d.summary(), model_LSTM.summary())
         (
-            mean_LSTM,
-            mean_Conv1D,
-            mean_GRU,
+            mean_lstm,
+            mean_conv1d,
+            mean_gru,
             df_ARES,
         ) = ARES_model.test_prediction_if_previous_models(
-            x_input_ARES, df_ARES, model_LSTM, model_Conv1D, model_GRU, scaler_ARES
+            x_input_ARES, df_ARES, model_LSTM, model_conv1d, model_gru, scaler_ARES
         )
-        ARES_model.figure(df_ARES, test_df_ARES, mean_LSTM, mean_Conv1D, mean_GRU)
+        ARES_model.figure(df_ARES, test_df_ARES, mean_lstm, mean_conv1d, mean_gru)
 
 
 if __name__ == "__main__":
