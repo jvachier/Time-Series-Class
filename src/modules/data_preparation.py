@@ -30,7 +30,7 @@ class DataPrep:
         self, sequence: pd.Series, n_steps_in: int, n_steps_out: int
     ) -> Tuple[np.array, np.array]:
         x = []
-        y = [] 
+        y = []
         for i in range(len(sequence)):
             # find the end of this pattern
             end_ix = i + n_steps_in
