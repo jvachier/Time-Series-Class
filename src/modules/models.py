@@ -92,10 +92,11 @@ class Timeseries:
                 verbose=0,
             )
             scores_lstm.append(score_lstm)
+
             print(
-                f"Conv1D - Fold: ${(k + 1):.2d},"
-                "Acc.: %${score_lstm[1]:.3f},"
-                "Loss: ${score_lstm[0]:.3f}"
+                f"Conv1D - Fold: {k + 1},"
+                f"Acc.: {score_lstm[1]:.3f},"
+                f"Loss: {score_lstm[0]:.3f}"
             )
 
             self.model_conv1d.fit(
@@ -112,9 +113,9 @@ class Timeseries:
             )
             scores_conv1d.append(score_conv1d)
             print(
-                f"Conv1D - Fold: ${(k + 1):.2d},"
-                "Acc.: %${score_conv1d[1]:.3f},"
-                "Loss: ${score_conv1d[0]:.3f}"
+                f"Conv1D - Fold: {(k + 1)},"
+                f"Acc.: {score_conv1d[1]:.3f},"
+                f"Loss: {score_conv1d[0]:.3f}"
             )
 
             self.model_gru.fit(
@@ -131,9 +132,9 @@ class Timeseries:
             )
             scores_gru.append(score_gru)
             print(
-                f"Conv1D - Fold: ${(k + 1):.2d},"
-                "Acc.: %${score_gru[1]:.4f},"
-                "Loss: ${score_gru[0]:.4f}"
+                f"Conv1D - Fold: {(k + 1)},"
+                f"Acc.: {score_gru[1]:.4f},"
+                f"Loss: {score_gru[0]:.4f}"
             )
         if (
             os.path.isfile("./models/model_LSTM_" + str(self.company) + ".keras")
