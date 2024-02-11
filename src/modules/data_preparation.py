@@ -1,8 +1,8 @@
-import numpy as np
-import pandas as pd
-
 from dataclasses import dataclass
 from typing import Tuple
+
+import numpy as np
+import pandas as pd
 
 from sklearn.preprocessing import MinMaxScaler
 
@@ -29,7 +29,8 @@ class DataPrep:
     def split_sequence(
         self, sequence: pd.Series, n_steps_in: int, n_steps_out: int
     ) -> Tuple[np.array, np.array]:
-        X, y = list(), list()
+        x = []
+        y = [] 
         for i in range(len(sequence)):
             # find the end of this pattern
             end_ix = i + n_steps_in
@@ -39,11 +40,11 @@ class DataPrep:
                 break
             # gather input and output parts of the pattern
             seq_x, seq_y = sequence[i:end_ix], sequence[end_ix:out_end_ix]
-            X.append(seq_x)
+            x.append(seq_x)
             y.append(seq_y)
-        return np.array(X), np.array(y)
+        return np.array(x), np.array(y)
 
-    def train_test_split(self, df) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def train_test_split(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
         train_size = int(len(df) * 0.7)
         train_df, test_df = df[0:train_size], df[train_size : len(df)]
         return train_df, test_df
