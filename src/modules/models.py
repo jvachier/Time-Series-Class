@@ -93,8 +93,9 @@ class Timeseries:
             )
             scores_lstm.append(score_lstm)
             print(
-                "LSTM - Fold: %2d, Acc.: %.3f, Loss: %.3f"
-                % (k + 1, score_lstm[1], score_lstm[0])
+                f"Conv1D - Fold: ${(k + 1):.2d},"
+                "Acc.: %${score_lstm[1]:.3f},"
+                "Loss: ${score_lstm[0]:.3f}"
             )
 
             self.model_conv1d.fit(
@@ -111,8 +112,9 @@ class Timeseries:
             )
             scores_conv1d.append(score_conv1d)
             print(
-                "Conv1D - Fold: %2d, Acc.: %.3f, Loss: %.3f"
-                % (k + 1, score_conv1d[1], score_conv1d[0])
+                f"Conv1D - Fold: ${(k + 1):.2d},"
+                "Acc.: %${score_conv1d[1]:.3f},"
+                "Loss: ${score_conv1d[0]:.3f}"
             )
 
             self.model_gru.fit(
@@ -129,8 +131,9 @@ class Timeseries:
             )
             scores_gru.append(score_gru)
             print(
-                "GRU - Fold: %2d, Acc.: %.4f, Loss: %.4f"
-                % (k + 1, score_gru[1], score_gru[0])
+                f"Conv1D - Fold: ${(k + 1):.2d},"
+                "Acc.: %${score_gru[1]:.4f},"
+                "Loss: ${score_gru[0]:.4f}"
             )
         if (
             os.path.isfile("./models/model_LSTM_" + str(self.company) + ".keras")
@@ -153,23 +156,23 @@ class Timeseries:
         yhat_gru = self.model_gru.predict(x_input, verbose=0)
 
         mean_lstm = np.mean(yhat_lstm, axis=1)
-        mean_Conv1D = np.mean(yhat_conv1d, axis=1)
-        mean_GRU = np.mean(yhat_gru, axis=1)
+        mean_conv1d = np.mean(yhat_conv1d, axis=1)
+        mean_gru = np.mean(yhat_gru, axis=1)
 
         mean_lstm = scaler.inverse_transform(mean_lstm.reshape(-1, 1)).reshape(
             len(mean_lstm),
         )
-        mean_Conv1D = scaler.inverse_transform(mean_Conv1D.reshape(-1, 1)).reshape(
-            len(mean_Conv1D),
+        mean_conv1d = scaler.inverse_transform(mean_conv1d.reshape(-1, 1)).reshape(
+            len(mean_conv1d),
         )
-        mean_GRU = scaler.inverse_transform(mean_GRU.reshape(-1, 1)).reshape(
-            len(mean_GRU),
+        mean_gru = scaler.inverse_transform(mean_gru.reshape(-1, 1)).reshape(
+            len(mean_gru),
         )
         old_df = df["Close"].shape
         df["Close"] = scaler.inverse_transform(
             df["Close"].to_numpy().reshape(-1, 1)
         ).reshape(old_df)
-        return mean_lstm, mean_Conv1D, mean_GRU, df
+        return mean_lstm, mean_conv1d, mean_gru, df
 
     def test_prediction_if_previous_models(
         self,
@@ -185,38 +188,38 @@ class Timeseries:
         yhat_gru = model_gru.predict(x_input, verbose=0)
 
         mean_lstm = np.mean(yhat_lstm, axis=1)
-        mean_Conv1D = np.mean(yhat_conv1d, axis=1)
-        mean_GRU = np.mean(yhat_gru, axis=1)
+        mean_conv1d = np.mean(yhat_conv1d, axis=1)
+        mean_gru = np.mean(yhat_gru, axis=1)
 
         mean_lstm = scaler.inverse_transform(mean_lstm.reshape(-1, 1)).reshape(
             len(mean_lstm),
         )
-        mean_Conv1D = scaler.inverse_transform(mean_Conv1D.reshape(-1, 1)).reshape(
-            len(mean_Conv1D),
+        mean_conv1d = scaler.inverse_transform(mean_conv1d.reshape(-1, 1)).reshape(
+            len(mean_conv1d),
         )
-        mean_GRU = scaler.inverse_transform(mean_GRU.reshape(-1, 1)).reshape(
-            len(mean_GRU),
+        mean_gru = scaler.inverse_transform(mean_gru.reshape(-1, 1)).reshape(
+            len(mean_gru),
         )
 
         old_df = df["Close"].shape
         df["Close"] = scaler.inverse_transform(
             df["Close"].to_numpy().reshape(-1, 1)
         ).reshape(old_df)
-        return mean_lstm, mean_Conv1D, mean_GRU, df
+        return mean_lstm, mean_conv1d, mean_gru, df
 
     def figure(
         self,
         df: pd.DataFrame,
         test_df: pd.DataFrame,
-        LSTM: pd.DataFrame,
-        Conv1D: pd.DataFrame,
-        GRU: pd.DataFrame,
+        lstm: pd.DataFrame,
+        conv1d: pd.DataFrame,
+        gru: pd.DataFrame,
     ) -> None:
         plt.figure(figsize=(12, 6))
         plt.plot(df["Date"], df["Close"], "--b", label=self.company)
-        plt.plot(test_df["Date"][self.n_steps_in :], LSTM, "r", label="RNN using LSTM")
-        plt.plot(test_df["Date"][self.n_steps_in :], Conv1D, "k", label="Conv1D")
-        plt.plot(test_df["Date"][self.n_steps_in :], GRU, "g", label="GRU")
+        plt.plot(test_df["Date"][self.n_steps_in :], lstm, "r", label="RNN using LSTM")
+        plt.plot(test_df["Date"][self.n_steps_in :], conv1d, "k", label="Conv1D")
+        plt.plot(test_df["Date"][self.n_steps_in :], gru, "g", label="GRU")
         plt.legend()
         plt.xlabel("Time")
         plt.ylabel("Close")
