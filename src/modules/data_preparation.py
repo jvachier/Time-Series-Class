@@ -45,6 +45,5 @@ class DataPrep:
 
     def train_test_split(self, df) -> Tuple[pd.DataFrame, pd.DataFrame]:
         train_size = int(len(df) * 0.7)
-        test_size = len(df) - train_size
         train_df, test_df = df[0:train_size], df[train_size : len(df)]
         return train_df, test_df

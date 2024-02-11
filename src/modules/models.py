@@ -6,7 +6,6 @@ from dataclasses import dataclass
 import matplotlib.pylab as plt
 from typing import Tuple
 
-import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, LSTM
 from tensorflow.keras.layers import Conv1D, GRU
