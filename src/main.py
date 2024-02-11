@@ -1,13 +1,10 @@
+import os.path
 import pandas as pd
 
-import os.path
+from keras.models import load_model
 
-# modules / classes
-import modules.data_preparation as data_prepration
-import modules.models as models
-
-from tensorflow.keras.models import load_model
-
+from src.modules import data_preparation
+from src.modules import models
 
 def main() -> None:
     n_steps_in, n_steps_out, n_features = 5, 1, 1
@@ -19,43 +16,43 @@ def main() -> None:
     print("\n")
     print("Company: AAPL")
     print("\n")
-    AAPL_model = models.Timeseries(
+    aapl_model = models.Timeseries(
         n_splits, n_steps_in, n_steps_out, n_features, epochs, "AAPL"
     )
 
-    AAPL = data_prepration.DataPrep(df, "AAPL")
+    aapl = data_preparation.DataPrep(df, "AAPL")
 
-    df_AAPL, scaler_AAPL = AAPL.prepare_data()
+    df_aapl, scaler_aapl = aapl.prepare_data()
 
-    train_df_AAPL, test_df_AAPL = AAPL.train_test_split(df_AAPL)
+    train_df_aapl, test_df_aapl = aapl.train_test_split(df_aapl)
 
-    X_train_AAPL, y_train_AAPL = AAPL.split_sequence(
-        train_df_AAPL["Close"], n_steps_in, n_steps_out
+    X_train_aapl, y_train_aapl = aapl.split_sequence(
+        train_df_aapl["Close"], n_steps_in, n_steps_out
     )
-    X_test_AAPL, y_test_AAPL = AAPL.split_sequence(
-        test_df_AAPL["Close"], n_steps_in, n_steps_out
+    X_test_aapl, y_test_aapl = aapl.split_sequence(
+        test_df_aapl["Close"], n_steps_in, n_steps_out
     )
 
-    X_train_AAPL = X_train_AAPL.reshape(
-        (X_train_AAPL.shape[0], X_train_AAPL.shape[1], n_features)
+    X_train_aapl = X_train_aapl.reshape(
+        (X_train_aapl.shape[0], X_train_aapl.shape[1], n_features)
     )
-    x_input_AAPL = X_test_AAPL.reshape(
-        (X_test_AAPL.shape[0], X_test_AAPL.shape[1], n_features)
+    x_input_aapl = X_test_aapl.reshape(
+        (X_test_aapl.shape[0], X_test_aapl.shape[1], n_features)
     )
 
     if os.path.isfile("./models/model_LSTM_AAPL.keras") is False:
-        AAPL_model.models()
-        AAPL_model.train_models(X_train_AAPL, y_train_AAPL)
+        aapl_model.models()
+        aapl_model.train_models(X_train_aapl, y_train_aapl)
 
         (
             mean_LSTM,
             mean_Conv1D,
             mean_GRU,
-            df_AAPL,
-        ) = AAPL_model.test_prediction_if_no_previous_models(
-            x_input_AAPL, df_AAPL, scaler_AAPL
+            df_aapl,
+        ) = aapl_model.test_prediction_if_no_previous_models(
+            x_input_aapl, df_aapl, scaler_aapl
         )
-        AAPL_model.figure(df, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU)
+        aapl_model.figure(df, test_df_aapl, mean_LSTM, mean_Conv1D, mean_GRU)
     else:
         model_GRU = load_model("./models/model_GRU_AAPL.keras")
         model_Conv1D = load_model("./models/model_Conv1D_AAPL.keras")
@@ -66,12 +63,12 @@ def main() -> None:
             mean_LSTM,
             mean_Conv1D,
             mean_GRU,
-            df_AAPL,
-        ) = AAPL_model.test_prediction_if_previous_models(
-            x_input_AAPL, df_AAPL, model_LSTM, model_Conv1D, model_GRU, scaler_AAPL
+            df_aapl,
+        ) = aapl_model.test_prediction_if_previous_models(
+            x_input_aapl, df_aapl, model_LSTM, model_Conv1D, model_GRU, scaler_aapl
         )
 
-        AAPL_model.figure(df_AAPL, test_df_AAPL, mean_LSTM, mean_Conv1D, mean_GRU)
+        aapl_model.figure(df_aapl, test_df_aapl, mean_LSTM, mean_Conv1D, mean_GRU)
 
     print("\n")
     print("Company: ARES")
