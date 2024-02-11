@@ -1,16 +1,14 @@
-import numpy as np
-import pandas as pd
-
 import os.path
 from dataclasses import dataclass
-import matplotlib.pylab as plt
 from typing import Tuple
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten, LSTM
-from tensorflow.keras.layers import Conv1D, GRU
-from tensorflow.keras.optimizers.legacy import Adam
+import matplotlib.pylab as plt
+import numpy as np
+import pandas as pd
 from sklearn.model_selection import TimeSeriesSplit
+from tensorflow.keras.layers import GRU, LSTM, Conv1D, Dense, Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers.legacy import Adam
 
 
 @dataclass(slots=True)
