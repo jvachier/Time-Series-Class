@@ -6,6 +6,7 @@ from keras.models import load_model
 from src.modules import data_preparation
 from src.modules import models
 
+
 def main() -> None:
     n_steps_in, n_steps_out, n_features = 5, 1, 1
     epochs = 50
