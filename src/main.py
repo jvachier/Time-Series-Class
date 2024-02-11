@@ -56,16 +56,16 @@ def main() -> None:
     else:
         model_gru = load_model("./models/model_GRU_AAPL.keras")
         model_conv1d = load_model("./models/model_Conv1D_AAPL.keras")
-        model_LSTM = load_model("./models/model_LSTM_AAPL.keras")
+        model_lstm = load_model("./models/model_LSTM_AAPL.keras")
 
-        print(model_gru.summary(), model_conv1d.summary(), model_LSTM.summary())
+        print(model_gru.summary(), model_conv1d.summary(), model_lstm.summary())
         (
             mean_lstm,
             mean_conv1d,
             mean_gru,
             df_aapl,
         ) = aapl_model.test_prediction_if_previous_models(
-            x_input_aapl, df_aapl, model_LSTM, model_conv1d, model_gru, scaler_aapl
+            x_input_aapl, df_aapl, model_lstm, model_conv1d, model_gru, scaler_aapl
         )
 
         aapl_model.figure(df_aapl, test_df_aapl, mean_lstm, mean_conv1d, mean_gru)
@@ -74,55 +74,55 @@ def main() -> None:
     print("Company: ARES")
     print("\n")
 
-    ARES_model = models.Timeseries(
+    ares_model = models.Timeseries(
         n_splits, n_steps_in, n_steps_out, n_features, epochs, "ARES"
     )
-    ARES = data_prepration.DataPrep(df, "ARES")
+    ares = data_preparation.DataPrep(df, "ARES")
 
-    df_ARES, scaler_ARES = ARES.prepare_data()
-    train_df_ARES, test_df_ARES = ARES.train_test_split(df_ARES)
+    df_ares, scaler_ares = ares.prepare_data()
+    train_df_ares, test_df_ares = ares.train_test_split(df_ares)
 
-    X_train_ARES, y_train_ARES = ARES.split_sequence(
-        train_df_ARES["Close"], n_steps_in, n_steps_out
+    x_train_ares, y_train_ares = ares.split_sequence(
+        train_df_ares["Close"], n_steps_in, n_steps_out
     )
-    X_test_ARES, y_test_ARES = ARES.split_sequence(
-        test_df_ARES["Close"], n_steps_in, n_steps_out
+    x_test_ares, y_test_ares = ares.split_sequence(
+        test_df_ares["Close"], n_steps_in, n_steps_out
     )
 
-    X_train_ARES = X_train_ARES.reshape(
-        (X_train_ARES.shape[0], X_train_ARES.shape[1], n_features)
+    x_train_ares = x_train_ares.reshape(
+        (x_train_ares.shape[0], x_train_ares.shape[1], n_features)
     )
-    x_input_ARES = X_test_ARES.reshape(
-        (X_test_ARES.shape[0], X_test_ARES.shape[1], n_features)
+    x_input_ares = x_test_ares.reshape(
+        (x_test_ares.shape[0], x_test_ares.shape[1], n_features)
     )
 
     if os.path.isfile("./models/model_LSTM_ARES.keras") is False:
-        ARES_model.models()
-        ARES_model.train_models(X_train_ARES, y_train_ARES)
+        ares_model.models()
+        ares_model.train_models(x_train_ares, y_train_ares)
 
         (
             mean_lstm,
             mean_conv1d,
             mean_gru,
-            df_ARES,
-        ) = ARES_model.test_prediction_if_no_previous_models(
-            x_input_ARES, df_ARES, scaler_ARES
+            df_ares,
+        ) = ares_model.test_prediction_if_no_previous_models(
+            x_input_ares, df_ares, scaler_ares
         )
-        ARES_model.figure(df_ARES, test_df_ARES, mean_lstm, mean_conv1d, mean_gru)
+        ares_model.figure(df_ares, test_df_ares, mean_lstm, mean_conv1d, mean_gru)
     else:
         model_gru = load_model("./models/model_GRU_ARES.keras")
         model_conv1d = load_model("./models/model_Conv1D_ARES.keras")
-        model_LSTM = load_model("./models/model_LSTM_ARES.keras")
-        print(model_gru.summary(), model_conv1d.summary(), model_LSTM.summary())
+        model_lstm = load_model("./models/model_LSTM_ARES.keras")
+        print(model_gru.summary(), model_conv1d.summary(), model_lstm.summary())
         (
             mean_lstm,
             mean_conv1d,
             mean_gru,
-            df_ARES,
-        ) = ARES_model.test_prediction_if_previous_models(
-            x_input_ARES, df_ARES, model_LSTM, model_conv1d, model_gru, scaler_ARES
+            df_ares,
+        ) = ares_model.test_prediction_if_previous_models(
+            x_input_ares, df_ares, model_lstm, model_conv1d, model_gru, scaler_ares
         )
-        ARES_model.figure(df_ARES, test_df_ARES, mean_lstm, mean_conv1d, mean_gru)
+        ares_model.figure(df_ares, test_df_ares, mean_lstm, mean_conv1d, mean_gru)
 
 
 if __name__ == "__main__":
