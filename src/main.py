@@ -1,10 +1,9 @@
 import os.path
-import pandas as pd
 
+import pandas as pd
 from keras.models import load_model
 
-from src.modules import data_preparation
-from src.modules import models
+from src.modules import data_preparation, models
 
 
 def main() -> None:
@@ -93,7 +92,7 @@ def main() -> None:
     x_train_ares = x_train_ares.reshape(
         (x_train_ares.shape[0], x_train_ares.shape[1], n_features)
     )
-    x_input_ares = x_test_ares.reshape(
+    x_test_ares = x_test_ares.reshape(
         (x_test_ares.shape[0], x_test_ares.shape[1], n_features)
     )
 
@@ -107,7 +106,7 @@ def main() -> None:
             mean_gru,
             df_ares,
         ) = ares_model.test_prediction_if_no_previous_models(
-            x_input_ares, df_ares, scaler_ares
+            x_test_ares, df_ares, scaler_ares
         )
         ares_model.figure(df_ares, test_df_ares, mean_lstm, mean_conv1d, mean_gru)
     else:
@@ -121,7 +120,7 @@ def main() -> None:
             mean_gru,
             df_ares,
         ) = ares_model.test_prediction_if_previous_models(
-            x_input_ares, df_ares, model_lstm, model_conv1d, model_gru, scaler_ares
+            x_test_ares, df_ares, model_lstm, model_conv1d, model_gru, scaler_ares
         )
         ares_model.figure(df_ares, test_df_ares, mean_lstm, mean_conv1d, mean_gru)
 
